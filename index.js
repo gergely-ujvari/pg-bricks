@@ -120,21 +120,24 @@ function instrumentQuery(query) {
 
 
 // A Conf object
-function Conf(connStr, _pg) {
-    this._connStr = connStr;
+function Conf(connData, _pg) {
     this._pg = _pg || pg;
 
-    var params = url.parse(connStr);
-    var auth = params.auth.split(':');
+    if (typeof connData === "string") {
+        var params = url.parse(connData);
+        var auth = params.auth.split(':');
 
-    this._config = {
-        user: auth[0],
-        password: auth[1],
-        host: params.hostname,
-        port: params.port,
-        database: params.pathname.split('/')[1],
-        ssl: true
-    };
+        this._config = {
+            user: auth[0],
+            password: auth[1],
+            host: params.hostname,
+            port: params.port,
+            database: params.pathname.split('/')[1],
+            ssl: true
+        };
+    } else {
+        this._config = connData;
+    }
 
     this._pool = new this._pg.Pool(this._config);
 }
@@ -144,7 +147,7 @@ Conf.prototype = {
     pg: pg,
 
     get native () {
-        return new Conf(this._connStr, pg.native);
+        return new Conf(this._config, pg.native);
     },
 
     run: function (func, callback) {
