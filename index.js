@@ -133,7 +133,6 @@ function Conf(connData, _pg) {
             host: params.hostname,
             port: params.port,
             database: params.pathname.split('/')[1],
-            ssl: true
         };
     } else {
         this._config = connData;
