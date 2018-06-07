@@ -157,7 +157,7 @@ function Conf(config, _pg) {
     this._pg = _pg || pg;
 
     if (config.pgOptions) {
-        this._pool = pg;
+        this._pool = pg.pool;
     } else {
         this._pool = this._pg.Pool(config);
     }
