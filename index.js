@@ -2,6 +2,7 @@ var debug = require('debug')('pg-bricks');
 var pf = require('point-free');
 var sql = require('sql-bricks-postgres');
 var pg = require('pg');
+var PgPool = require('node-pg-connection-pool');
 
 
 function _expectRow(res, callback) {
@@ -154,10 +155,10 @@ function instrument(client) {
 function Conf(config, _pg) {
     if (typeof config === 'string') config = {connectionString: config};
     this._config = config;
-    this._pg = _pg || pg;
 
+    this._pg = _pg || pg;
     if (config.pgOptions) {
-        this._pool = pg.pool;
+        this._pool = new PgPool(config);
     } else {
         this._pool = this._pg.Pool(config);
     }
