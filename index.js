@@ -155,7 +155,12 @@ function Conf(config, _pg) {
     if (typeof config === 'string') config = {connectionString: config};
     this._config = config;
     this._pg = _pg || pg;
-    this._pool = this._pg.Pool(config);
+
+    if (config.pgOptions) {
+        this._pool = pg;
+    } else {
+        this._pool = this._pg.Pool(config);
+    }
 }
 
 Conf.prototype = {
